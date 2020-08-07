@@ -1,11 +1,10 @@
 package com.hotnews;
 
+import com.hotnews.dao.CommentDao;
 import com.hotnews.dao.LoginTicketDao;
 import com.hotnews.dao.NewsDao;
 import com.hotnews.dao.UserDao;
-import com.hotnews.model.LoginTicket;
-import com.hotnews.model.News;
-import com.hotnews.model.User;
+import com.hotnews.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +30,9 @@ public class InitDatabaseTests {
 	@Autowired
 	LoginTicketDao loginTicketDao;
 
+	@Autowired
+	CommentDao commentDao;
+
 	@Test
 	public void initData() {
 		Random random = new Random();
@@ -54,6 +56,17 @@ public class InitDatabaseTests {
 			news.setLink(String.format("http://www.nowcoder.com/%d.html", i));
 			newsDao.addNews(news);
 
+			for (int j = 0; j < 3; j++) {
+				Comment comment = new Comment();
+				comment.setUserId(i+1);
+				comment.setEntityId(news.getId());
+				comment.setEntityType(EntityType.ENTITY_COMMENT);
+				comment.setStatus(0);
+				comment.setCreatedDate(new Date());
+				comment.setContent("Comment " + String.valueOf(j));
+				commentDao.addComment(comment);
+			}
+
 			user.setPassword("newpassword");
 			userDao.updatePassword(user);
 
@@ -73,6 +86,8 @@ public class InitDatabaseTests {
 
 		Assert.assertEquals(1, loginTicketDao.selectByTicket("TICKET1").getUserId());
 		Assert.assertEquals(2, loginTicketDao.selectByTicket("TICKET1").getStatus());
+
+//		Assert.assertNotNull(commentDao.selectByEntity(1,EntityType.ENTITY_NEWS).get(1));
 	}
 
 

@@ -6,11 +6,47 @@
         <version>2.3.1</version>
     </dependency>
 
-    问题:
+    由于项目讲解时是16年，前端使用的是velocity模板引擎，在spring boot1.5之后已经遭到弃用，
+    而笔者在start.sprintg.io中下载的spring boot版本为2.1.4,因此没有集成velocity相关的依赖，导致很多不兼容问题出现。
+    项目中写好前端代码是使用velocity语言，因此我们要通过以下方式引入velocity相关的依赖。
+
+    1.在pom.xml文件中加入以下代码：
+    <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-velocity</artifactId>
+       <version>1.1.3.RELEASE</version>
+    </dependency>
+    <dependency>
+       <groupId>org.apache.velocity</groupId>
+       <artifactId>velocity-engine-core</artifactId>
+       <version>2.0</version>
+    </dependency>
+    <dependency>
+       <groupId>org.apache.velocity</groupId>
+       <artifactId>velocity-tools</artifactId>
+       <version>1.4</version>
+    </dependency>
+
+    2.将spring boot的版本改到1.5以下：
+    <parent>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-parent</artifactId>
+       <version>1.4.0.RELEASE</version>
+       <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    3.在配置文件中加入velocity配置信息
+    spring.velocity.suffix=.html
+    spring.velocity.cache=false
+    spring.velocity.toolbox-config-location=toolbox.xml
+
+    4.在main/resource目录下添加toolbox.xml文件
+
+    问题：
         org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.hotnews.dao.NewsDao.selectByUserIdAndOffset
-    原因:
+    原因：
         要确保target文件目录下的Dao接口和Dao.xml文件在同一文件夹下
-    解决:
+    解决：
         pom.xml下配置
         <!--解决Intellij构建项目时，target/classes目录下不存在mapper.xml文件-->
         <resources>
@@ -22,3 +58,17 @@
             </resource>
         </resources>
 
+
+    问题：
+        凡是有#if($user)的地方都不显示，按理说应该是判断是否登录，可现在无法验证是否登录，header.html不显示分享和站内信,登录后不跳转
+    原因：
+        初步认为是#if ($user)判断有误，或者是无法确认用户是否登录，因为登录后提示报错无法登录
+        或者class="" 内无内容
+    解决：
+        暂无。可以尝试换一下if 和else 里的内容,
+
+    问题：
+        logout无法登出用户
+    原因：
+
+    解决：

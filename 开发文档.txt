@@ -77,6 +77,28 @@
         #   w/100/h/100/  修改图片尺寸宽度和高度
         图片基本处理文档:
             http://developer.qiniu.com/code/v6/api/kodo-api/image/imageview2.html
-
     优点：
         灵活，降低冗余，统一管理
+
+    功能:
+        通用新模块的开发流程
+    实现:
+        1. Database Column。                 首先确定数据库字段
+        2. Model：模型定义，和数据库相匹配       然后根据数据库创建这个模型(对象)
+        3. DAO：数据读取。                     然后创建访问数据库的模型(类)
+        4. Service：服务包装。                 拿出数据，进行复杂逻辑操作
+        5. Controller：业务入口。              创建控制器。用作入口或者出口
+        6. Test                              上线前的测试
+
+    功能:
+        消息中心分组、排序。和每个人的消息分别划成一组，并只显示最新的一条消息。
+    实现:
+        #查询所有信息
+        SELECT * FROM message;
+        #查询某用户有关的所有信息(收到和发出)，并按倒叙排序(最新的在最上面)
+        SELECT * FROM message where from_id=12 or to_id=12 order by id desc;
+        #查询与每个人相关的消息列表(倒叙)，只与每个人消息中最新的显示一条，并且显示消息数量。
+        SELECT *, count(id) as cnt from
+            (SELECT * FROM message where from_id=12 or to_id=12 order by id desc) tt
+        group by conversation_id order by id desc;
+

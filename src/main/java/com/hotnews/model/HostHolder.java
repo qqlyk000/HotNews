@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 /**
  * Author: XianDaLi
  * Date: 2020/8/6 15:30
- * Remark: 用来保存用户登录状态
+ * Remark: 用来保存用户登录状态  面向切面
  */
 @Component
 public class HostHolder {

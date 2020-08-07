@@ -23,7 +23,7 @@ public interface LoginTicketDao {
 
 	//真删除 暂时保留
 	@Delete({"delete from ", TABLE_NAME, " where ticket=#{ticket}"})
-	void deleteByTicket(String ticket);
+	void deleteByTicket(@Param("ticket") String ticket);
 
 	//假删除 更新状态码
 	@Update({"update ", TABLE_NAME, " set status=#{status} where ticket=#{ticket}"})
