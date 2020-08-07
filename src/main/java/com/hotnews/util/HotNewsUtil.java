@@ -17,6 +17,20 @@ import java.util.Map;
 public class HotNewsUtil {
 	private static final Logger logger = LoggerFactory.getLogger(HotNewsUtil.class);
 
+	public static String HOTNEWS_DOMAIN = "http://127.0.0.1:8080/";
+	public static String IMAGE_DIR = "E:/upload/upload";
+
+	//判断文件名是否符合要求
+	public static String[] IMAGE_FILE_EXT = new String[]{"png", "bmp", "jpg", "jpeg"};
+	public static boolean isFileAllowed(String fileExt){
+		for(String ext : IMAGE_FILE_EXT){
+			if(ext.equals(fileExt)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//可以传输一个key
 	public static String getJSONString(int code){
 		JSONObject json = new JSONObject();

@@ -71,6 +71,12 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency><!--七牛云服务-->
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.2.0, 7.2.99]</version>
+		</dependency>
+
 <!--		<dependency>&lt;!&ndash;第三节课，这个不加会报错&ndash;&gt;-->
 <!--			<groupId>javax.xml.bind</groupId>-->
 <!--			<artifactId>jaxb-api</artifactId>-->
@@ -113,6 +119,16 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<!--解决Intellij构建项目时，target/classes目录下不存在mapper.xml文件-->
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 </project>

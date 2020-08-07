@@ -6,5 +6,19 @@
         <version>2.3.1</version>
     </dependency>
 
-    //org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.hotnews.dao.NewsDao.selectByUserIdAndOffset
-    要确保target文件目录下的Dao接口和Dao.xml文件在同一文件夹下
+    问题:
+        org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.hotnews.dao.NewsDao.selectByUserIdAndOffset
+    原因:
+        要确保target文件目录下的Dao接口和Dao.xml文件在同一文件夹下
+    解决:
+        pom.xml下配置
+        <!--解决Intellij构建项目时，target/classes目录下不存在mapper.xml文件-->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
