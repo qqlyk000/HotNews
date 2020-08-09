@@ -26,13 +26,16 @@ public interface MessageDao {
 	int addMessage(Message message);
 
 	//查询与每个人相关的消息列表(倒叙)，只与每个人消息中最新的显示一条，并且显示消息数量。
-	/*@Select({"select ", INSERT_FIELDS, " ,count(id) as id from " +
+	/*
+	@Select({"select ", INSERT_FIELDS, " ,count(id) as id from " +
 		"( select",INSERT_FIELDS, "from ", TABLE_NAME, " where from_id=#{userId} or to_id=#{userId} order by id desc) tt " +
-	"group by conversation_id order by id desc limit #{offset},#{limit}"})*/
+	"group by conversation_id order by id desc limit #{offset},#{limit}"})
+	*/
 	/*
 	SELECT *, count(id) as cnt from
         (SELECT * FROM message where from_id=12 or to_id=12 order by id desc) tt
-    group by conversation_id order by id desc;*/
+    group by conversation_id order by id desc;
+    */
 	@Select({"select ", INSERT_FIELDS, " ,count(id) as id from " +
 			"( select * from ", TABLE_NAME, " where from_id=#{userId} or to_id=#{userId} order by id desc) tt " +
 			"group by conversation_id order by id desc limit #{offset},#{limit}"})
@@ -40,6 +43,7 @@ public interface MessageDao {
 	                                  @Param("offset") int offset,
 	                                  @Param("limit") int limit);
 
+	//获取未读消息数量
 	@Select({"select count(id) from ", TABLE_NAME, " where has_read = 0 and to_id=#{userId} and conversation_id=#{conversationId}"})
 	int getConversationUnReadCount(@Param("userId") int userId,
 	                               @Param("conversationId") String conversationId);
@@ -52,4 +56,5 @@ public interface MessageDao {
 	List<Message> getConversationDetail(@Param("conversationId") String conversationId,
 	                                    @Param("offset") int offset,
 	                                    @Param("limit") int limit);
+
 }

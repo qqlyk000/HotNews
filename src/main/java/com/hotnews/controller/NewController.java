@@ -2,10 +2,7 @@ package com.hotnews.controller;
 
 import com.hotnews.aspect.LogAspect;
 import com.hotnews.model.*;
-import com.hotnews.service.CommentService;
-import com.hotnews.service.NewsService;
-import com.hotnews.service.QiniuService;
-import com.hotnews.service.UserService;
+import com.hotnews.service.*;
 import com.hotnews.util.HotNewsUtil;
 import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
@@ -52,10 +49,19 @@ public class NewController {
 	@Autowired
 	CommentService commentService;
 
+	@Autowired
+	LikeService likeService;
+
 	@RequestMapping(path = {"/news/{newsId}"},method = {RequestMethod.GET})
 	public String newsDetail(@PathVariable("newsId") int newsId, Model model){
 		News news = newsService.getById(newsId);
 		if (news != null){
+			int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
+			if (localUserId != 0) {
+				model.addAttribute("like", likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS, news.getId()));
+			} else {
+				model.addAttribute("like", 0);
+			}
 			//评论
 			List<Comment> comments = commentService.getCommentsByEntity(news.getId(), EntityType.ENTITY_NEWS);
 			List<ViewObject> commentVOs = new ArrayList<ViewObject>();
@@ -101,7 +107,7 @@ public class NewController {
 
 	//展示图片
 	//读取图片,传参数
-	@RequestMapping(path = {"/image"},method = {RequestMethod.GET})
+	@RequestMapping(path = {"/image"},method = {RequestMethod.POST})
 	@ResponseBody
 	public void getImage(@RequestParam("name") String imageName,
 	                     HttpServletResponse response){

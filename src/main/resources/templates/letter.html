@@ -14,21 +14,21 @@
                             </a>
                             -->
                             <a href="/msg/detail?conversationId=$!{conversation.conversation.conversationId}">
-                                共$!{conversation.conversation.id}条会话
+                                共$!{conversation.conversation.id}条会话 <!--从数据库中查询该表信息的时已把 count 命名为 id 存入-->
                             </a>
                         </div>
                     </div>
                     <div class="chat-headbox">
                         <span class="msg-num">
-                            $!{conversation.unreadCount}
+                            $!{conversation.unread}
                         </span>
-                        <a class="list-head" href="/user/$!{conversation.userId}">
-                            <img alt="头像" src="$!{conversation.headUrl}">
+                        <a class="list-head" href="/user/$!{conversation.user.id}">
+                            <img alt="头像" src="$!{conversation.user.headUrl}">
                         </a>
                     </div>
                     <div class="letter-detail">
-                        <a title="$!{conversation.userName}" class="letter-name level-color-1">
-                            $!{conversation.userName}
+                        <a title="$!{conversation.user.name}" class="letter-name level-color-1">
+                            $!{conversation.user.name}
                         </a>
                         <p class="letter-brief">
                             <a href="/msg/detail?conversationId=$!{conversation.conversation.conversationId}">

@@ -102,3 +102,82 @@
             (SELECT * FROM message where from_id=12 or to_id=12 order by id desc) tt
         group by conversation_id order by id desc;
 
+    功能：
+        Redis
+    应用:
+        PV
+        点赞
+        关注
+        排行榜
+        验证码
+        缓存
+        异步队列
+        判题队列
+
+    功能：
+        队列实现异步
+    实现:
+
+    功能:
+        邮件发送
+    实现：
+        1. 导包或maven添加配置引入mail库
+        2. 创建MailSender Service
+        3. 邮箱使用SMTP服务
+        4. 设置邮箱信息
+        5. 设置邮件信息(渲染模板引擎)
+
+    功能:
+        排序相关:
+            1.通用排序
+                1. 单位时间内的交互数，del.icio.us按1小时内收藏排行
+                2. 总交互数，按总点赞数
+                3. 评论数加权
+                4. 按时间排序
+            2.Hacker News
+                Score=（P-1）/（T+2）G
+                P：投票数，-1是把自己投的过滤掉
+                T：发布到现在的时间间隔，单位小时，+2防止除数太小
+                G：重力加速度，分值根据时间降低速率
+            3.Reddit
+                t = (time of entry post) - (Dec 8, 2005)
+                x = upvotes - downvotes
+
+                y = {1 if x > 0, 0 if x = 0, -1 if x < 0)
+                z = {1 if x < 0, otherwise x}
+
+                log(z) + (y * t)/45000
+                时间是最重要的权重，由于流量比较大，所以 对于高赞文章有所优势，适合新闻类排序
+                https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111e33d0d9
+            4.StackOverflow
+                (log(Qviews)*4) + ((Qanswers * Qscore)/5) + sum(Ascores)
+                --------------------------------------------------------
+                ((QageInHours+1) - ((QageInHours - Qupdated)/2)) ^ 1.5
+
+                Qviews：问题浏览数，通过log来平滑
+                Qanswer：问题回答数，有回答的题目才是好问题
+                Qscore：问题赞踩差，赞的越多，问题越好 sum（Ascores）：回答赞踩差，回答的越多问题越好
+                QageInHours：题目发布时间差，时间越久排名越后
+                Qupdated：最新的回答时间，越新关注度越高
+                https://meta.stackexchange.com/questions/11602/what-formula-should-be-used-to-determine-hot-questions
+            5.IMDB
+                加权排名 (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C
+                R = 某电影投票平均分
+                v = 有效投票人数
+                m = 最低投票人数，1250
+                C = 所有电影平均值
+                投票人数越多，越偏向于用户打分值，防止冷门电影小数人高分导致的高分
+
+    功能：
+        单元测试
+    实现：
+        1. 初始化数据
+        2. 执行要测试的业务
+        3. 验证测试的数据
+        4. 清理数据
+
+
+
+
+
+

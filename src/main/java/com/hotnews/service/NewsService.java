@@ -61,4 +61,8 @@ public class NewsService {
 		// xxxx.jpg
 		return HotNewsUtil.HOTNEWS_DOMAIN + "image?name=" + fileName;
 	}
+
+	public int updateLikeCount(int id, int count) {
+		return newsDao.updateLikeCount(id, count);
+	}
 }

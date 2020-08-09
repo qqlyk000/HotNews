@@ -1,5 +1,8 @@
 package com.hotnews.controller;
 
+import com.hotnews.async.EventModel;
+import com.hotnews.async.EventProducer;
+import com.hotnews.async.EventType;
 import com.hotnews.model.News;
 import com.hotnews.model.ViewObject;
 import com.hotnews.service.NewsService;
@@ -33,8 +36,10 @@ public class LoginController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	EventProducer eventProducer;
 	// 注册操作
-	@RequestMapping(path = {"/reg"}, method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(path = {"/reg/"}, method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
 	public String reg(Model model, @RequestParam("username") String username,
 	                  @RequestParam("username") String password,
@@ -47,13 +52,13 @@ public class LoginController {
 			Map<String, Object> map = userService.register(username, password);
 			if(map.containsKey("ticket")){
 				Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
-				response.addCookie(cookie);
 				cookie.setPath("/");
 				//记住登录状态
 				if(rememberMe > 0){
 					//设置cookie最大时限为5天
 					cookie.setMaxAge(3600*24*5);
 				}
+				response.addCookie(cookie);
 				return HotNewsUtil.getJSONString(0,"注册成功");
 			}else {
 				return HotNewsUtil.getJSONString(1, map);
@@ -75,7 +80,7 @@ public class LoginController {
 		logger.info("Visit Login");
 
 		try{
-			Map<String, Object> map = userService.register(username, password);
+			Map<String, Object> map = userService.login(username, password);
 			if(map.containsKey("ticket")){
 				Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
 				response.addCookie(cookie);
@@ -85,13 +90,16 @@ public class LoginController {
 					//设置cookie最大时限为5天
 					cookie.setMaxAge(3600*24*5);
 				}
-				return HotNewsUtil.getJSONString(0,"登录成功");
+				response.addCookie(cookie);
+				eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int) map.get("userId"))
+						.setExt("username",username).setExt("email","lxd@123.com"));
+				return HotNewsUtil.getJSONString(0,"成功");
 			}else {
 				return HotNewsUtil.getJSONString(1, map);
 			}
 		}catch (Exception e){
 			logger.error("注册异常" + e.getMessage());
-			return HotNewsUtil.getJSONString(1,"注册异常");
+			return HotNewsUtil.getJSONString(1,"异常");
 		}
 	}
 

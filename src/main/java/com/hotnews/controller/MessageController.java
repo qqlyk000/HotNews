@@ -1,5 +1,6 @@
 package com.hotnews.controller;
 
+import com.hotnews.model.HostHolder;
 import com.hotnews.model.Message;
 import com.hotnews.model.User;
 import com.hotnews.model.ViewObject;
@@ -37,6 +38,32 @@ public class MessageController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	HostHolder hostHolder;
+
+	@RequestMapping(path = {"/msg/list"},method = {RequestMethod.GET})
+	public String conversationDetail(Model model){
+		try{
+			int localUserId = hostHolder.getUser().getId();
+			List<ViewObject> conversations = new ArrayList<>();
+			List<Message> conversationList = messageService.getConversationList(localUserId,0,10);
+			for(Message msg : conversationList){
+				ViewObject vo = new ViewObject();
+				vo.set("conversation",msg);
+				int targetId = msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId();
+				User user = userService.getUser(targetId);
+				vo.set("user",user);
+				vo.set("unread",messageService.getConversationUnReadCount(localUserId,msg.getConversationId()));
+				conversations.add(vo);
+			}
+			model.addAttribute("conversations",conversations);
+		}catch (Exception e){
+			logger.error("获取站内信列表失败" + e.getMessage());
+		}
+		return "letter";
+	}
+
+	//查询自己的站内信箱中和他人的消息记录
 	@RequestMapping(path = {"/msg/detail"},method = {RequestMethod.GET})
 	public String conversationDetail(Model model, @RequestParam("conversationId") String conversationId){
 		try {

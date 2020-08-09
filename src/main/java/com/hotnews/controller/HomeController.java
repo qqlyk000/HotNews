@@ -1,8 +1,10 @@
 package com.hotnews.controller;
 
+import com.hotnews.model.EntityType;
 import com.hotnews.model.HostHolder;
 import com.hotnews.model.News;
 import com.hotnews.model.ViewObject;
+import com.hotnews.service.LikeService;
 import com.hotnews.service.NewsService;
 import com.hotnews.service.UserService;
 import org.slf4j.Logger;
@@ -37,14 +39,23 @@ public class HomeController {
 	@Autowired
 	HostHolder hostHolder;
 
+	@Autowired
+	LikeService likeService;
+
 	private List<ViewObject> getNews(int userId, int offset, int limit) {
 		List<News> newsList = newsService.getLatestNews(userId, offset, limit);
-
+		int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
 		List<ViewObject> vos = new ArrayList<>();
 		for (News news : newsList) {
 			ViewObject vo = new ViewObject();
 			vo.set("news", news);
 			vo.set("user", userService.getUser(news.getUserId()));
+
+			if(localUserId != 0){
+				vo.set("like",likeService.getLikeStatus(localUserId, EntityType.ENTITY_NEWS,news.getId()));
+			}else {
+				vo.set("like",0);
+			}
 			vos.add(vo);
 		}
 		return vos;

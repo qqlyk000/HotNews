@@ -6,6 +6,8 @@ import com.hotnews.model.LoginTicket;
 import com.hotnews.model.User;
 import com.hotnews.util.HotNewsUtil;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.*;
  */
 @Service
 public class UserService {
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
 	private UserDao userDao;
 
@@ -26,7 +29,6 @@ public class UserService {
 
 	// 注册
 	public Map<String,Object> register(String username, String password){
-
 		Map<String,Object> map = new HashMap<>();
 		if(StringUtils.isBlank(username)){
 			map.put("msgname","用户名不能为空");
@@ -61,14 +63,12 @@ public class UserService {
 		// 如果注册成功 下发ticket
 		String ticket = addLoginTicket(user.getId());
 		map.put("ticket",ticket);
-
 		return map;
 
 	}
 
 	// 登录验证
 	public Map<String,Object> login(String username, String password){
-
 		Map<String,Object> map = new HashMap<>();
 		if(StringUtils.isBlank(username)){
 			map.put("msgname","用户名不能为空");

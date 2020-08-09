@@ -42,7 +42,6 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
 
 	}
 
-	//
 	@Override
 	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
 	}
