@@ -89,3 +89,51 @@
     原因：
         疑似前端按钮处理逻辑问题
     解决：
+
+    问题:
+        今天看了一篇文章，说在mysql中用utf8mb4代替utf8会少很多错误，尝试后连接数据库时报错
+        Unsupported character encoding 'utf8mb4'.
+    原因:
+        猜测可能是版本问题，目前使用的是mysql5.7版本
+    解决:
+        暂不考虑解决，因为文章说这是遗留问题，但是在5.7版本并不适用，如果是8.0版本特有的问题就不能叫遗留。
+        真实性存疑，下次使用更高版本会首先试用utf8mb4编码，如若不行则遗忘该文章
+        https://medium.com/@adamhooper/in-mysql-never-use-utf8-use-utf8mb4-11761243e434
+
+    <repositories>
+    		<repository>
+    			<id>alimaven</id>
+    			<name>aliyun maven</name>
+    			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    			<releases>
+    				<enabled>true</enabled>
+    			</releases>
+    			<snapshots>
+    				<enabled>false</enabled>
+    			</snapshots>
+    		</repository>
+    	</repositories>
+
+    	<!--解决Intellij构建项目时，target/classes目录下不存在mapper.xml文件-->
+        		<resources>
+        			<resource>
+        				<directory>${basedir}/src/main/java</directory>
+        				<includes>
+        					<include>**/*.xml</include>
+        				</includes>
+        			</resource>
+        		</resources>
+        	</build>
+
+        	<?xml version="1.0" encoding="UTF-8"?>
+            <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+            	<modelVersion>4.0.0</modelVersion>
+
+            	<groupId>com.hotnews</groupId>
+            	<artifactId>HotNews</artifactId>
+            	<version>0.0.1-SNAPSHOT</version>
+            	<packaging>jar</packaging>
+
+            	<name>HotNews</name>
+            	<description>Demo project for Spring Boot</description>

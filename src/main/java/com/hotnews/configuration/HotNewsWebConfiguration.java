@@ -26,7 +26,9 @@ public class HotNewsWebConfiguration extends WebMvcConfigurerAdapter {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(passportInterceptor);
 		//注册登录拦截器
-		registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting*");
+//		registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/setting*");
+		registry.addInterceptor(loginRequiredInterceptor).
+				addPathPatterns("/msg/*").addPathPatterns("/like").addPathPatterns("/dislike");
 		super.addInterceptors(registry);
 	}
 }
