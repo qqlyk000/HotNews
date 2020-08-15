@@ -57,12 +57,14 @@
         真实性存疑，下次使用更高版本会首先试用utf8mb4编码，如若不行则遗忘该文章
         https://medium.com/@adamhooper/in-mysql-never-use-utf8-use-utf8mb4-11761243e434
 
-
     问题:
         Exception sending context initialized event to
         listener instance of class org.apache.tomcat.websocket.server.WsContextListener;
         java.lang.NoSuchMethodError: javax.servlet.ServletContext.getVirtualServerName()Ljava/lang/String;
     原因:
-        猜测是at org.apache.tomcat.websocket.server.WsServerContainer.<init>(WsServerContainer.java:149)中有个文件找不到
-        导入的jar包版本问题，因为清空过maven仓库，重新导入才发生此错误
+        猜测是at org.apache.tomcat.websocket.server.WsServerContainer.<init>(WsServerContainer.java:149)中有个文件未生效
+        导入的jar包版本问题，因为清空过maven仓库，重新导入才发生此错误。没有导入异步队列对应jar包，导致不生效，springboot自动装配原理
+        不满足条件。
+        明确原因：Tomcat版本问题.
     解决:
+        更换依赖中的内嵌tomcat版本后解决

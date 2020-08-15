@@ -20,7 +20,6 @@ import java.util.Date;
 @Component
 public class LogAspect {
 	private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
-
 	@Before("execution(* com.hotnews.controller.*Controller.*(..))")
 	public void beforeMethod(JoinPoint joinPoint){
 		StringBuilder sb = new StringBuilder();
